@@ -1,25 +1,40 @@
 <Tipo>
-<Operacion= SUMA>
-<Numero> 4.5 </Numero>
-<Numero!!!> 5.32 </Numero!!!>
-</Operacion>
-<Operaci!!!!!!!on= RESTA>
-<Numero> 84!!!!! </Numero>
-<Numero> 33.7 </Numero>
-</Operacion>
-<Operacion= MULTIPLICACION>
-<Numero> 5 </Numero>
-<Numero> 7 </Numero>
-</Operacion>
-<Operacion= DIVISION>
-<Numero> 45 </Numero>
-<Numero> 9 </Numero>
-</Operacion>
-<Operacion= SUMA>
-<Numero> 5.4 <Numero>
-<Operacion= MULTIPLICACION>
-<Numero> 7.8 </Numero>
-<Numero> 4.3 </Numero>
-</Operacion>
+<Operacion=SUMA>
+	<Numero>4.5</Numero>
+	<Numero>5.32</Numero>
+</Operacion=SUMA>
+<Operacion=RESTA>
+	<Numero>84</Numero>
+	<Numero>33.7</Numero>
+</Operacion=RESTA>
+<Operacion=MULTIPLICACION>
+	<Numero>5</Numero>
+	<Numero>7</Numero>
+</Operacion=MULTIPLICACION>
+<Operacion=DIVISION>
+	<Numero>45</Numero>
+	<Numero>9</Numero>
+</Operacion=DIVISION>
+<Operacion=SUMA>
+	<Numero>5.4</Numero>
+<Operacion=MULTIPLICACION>
+	<Numero>7.8</Numero>
+	<Numero>4.3</Numero>
+</Operacion=MULTIPLICACION>
 </Operacion>
 </Tipo>
+
+<Texto>
+ Realizar las operaciones básicas de suma, resta, multiplicación y división, así como operaciones complejas.
+</Texto> 
+<Funcion = ESCRIBIR>
+  <Titulo> Operaciones </Titulo>
+  <Descripcion> [TEXTO] </Descripcion>
+  <Contenido> [TIPO] </Contenido>
+</Funcion> 
+<Estilo> 
+  <Titulo Color=AZUL Tamanio=12/> 
+  <Descripcion Color=VERDE Tamanio=3/> 
+  <Contenido Color=GRIS Tamanio=3>
+</Estilo>
+             

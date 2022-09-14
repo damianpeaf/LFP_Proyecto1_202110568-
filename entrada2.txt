@@ -1,4 +1,4 @@
-<Tipo>
+1111111111111111111111111111111111111111111111111111<Tipo>
 <Operacion=SUMA>
 <Numero>
 4.5
@@ -58,4 +58,3 @@
   <Descripcion Color=VERDE Tamanio=3/> 
   <Contenido Color=GRIS Tamanio=3>
 </Estilo>
-             

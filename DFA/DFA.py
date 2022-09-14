@@ -20,12 +20,12 @@ class DFA ():
         # * other props
         self.reset()
 
-    def evalCharacter(self, character, isCharacterNext):
+    def evalCharacter(self, character, isCharacterNext, row, col):
 
         # * Not in alphabet, not valid character
         if character not in self.alphabet:
             # ? Character
-            return Token(TokenType.ERROR, character)
+            return Token(TokenType.ERROR, character, row, col)
 
         # * Looks for next state
 
@@ -46,9 +46,10 @@ class DFA ():
                         if self.actualState.isAcceptance:
                             # * VALID TOKEN
                             self.validCharacter = True
-                            return Token(self.actualState.tokenType, self.cleanLexeme())
+                            return Token(self.actualState.tokenType, self.cleanLexeme(), row, col)
                         else:
-                            return Token(TokenType.ERROR, self.lexeme)
+                            # * Incomplete lexema
+                            return Token(TokenType.ERROR, self.lexeme, row, col)
 
                     # * New state set, keeps running
                     return True
@@ -60,11 +61,11 @@ class DFA ():
             # * VALID TOKEN
             # !!! Lexemes adyascent
             self.validCharacter = False
-            return Token(self.actualState.tokenType, self.cleanLexeme())
+            return Token(self.actualState.tokenType, self.cleanLexeme(), row, col)
 
         # * No valid lexeme
-
-        return Token(TokenType.ERROR, self.lexeme)
+        self.lexeme += character
+        return Token(TokenType.ERROR, self.lexeme, row, col)
 
     def generateDOT(self, render=False):
         dot = graphviz.Digraph('DFA', comment='DFA :)')

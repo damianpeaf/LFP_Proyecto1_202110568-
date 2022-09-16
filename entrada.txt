@@ -1,26 +1,19 @@
 <Tipo>
-	<Operacion= SUMA>
+	<Operacion= MULTIPLICACION>
 		<Numero> 4.5 </Numero>
-		<Numero> 5.32 </Numero>
-	</Operacion>
-	<Operacion= RESTA>
-		<Numero> 84 </Numero>
-		<Numero> 33.7 </Numero>
-	</Operacion>
-	<Operacion= MULTIPLICACION>	
-		<Numero> 5 </Numero>
-		<Numero> 7 </Numero>
-	</Operacion>
-	<Operacion= MOD>
-		<Numero> 45 </Numero>
-		<Numero> 9 </Numero>
-	</Operacion>
-	<Operacion= SUMA>
-		<Numero> 5.4 </Numero>
-		<Operacion= MULTIPLICACION>
+		<Operacion= SENO>
 			<Numero> 7.8 </Numero>
-			<Numero> 4.3 </Numero>
 		</Operacion>
+		<Operacion= SUMA>
+			<Numero> 7.8 </Numero>
+			<Numero> 10 </Numero>
+			<Operacion= SENO>
+<Numero> 10 </Numero>			</Operacion>
+		</Operacion>
+		<Numero> 5 </Numero>
+	</Operacion>
+	<Operacion= SENO>
+		<Numero> 7.8 </Numero>
 	</Operacion>
 </Tipo>
 <Texto>
@@ -28,11 +21,11 @@
 </Texto>
 <Funcion = ESCRIBIR>
 	<Titulo> Operaciones </Titulo>
-	<Descripcion> [TEXTO] </Descripcion>
+	<Descripcion> [TIPO] </Descripcion>
 	<Contenido> [TIPO] </Contenido>
 </Funcion>
 <Estilo>
 	<Titulo Color=AZUL Tamanio=12/>
-	<Descripcion Color=VERDE Tamanio=3/>
-	<Contenido Color=GRIS Tamanio=3 />
+	<Descripcion Color=VERDE Tamanio=12/>
+	<Contenido Color=GRIS Tamanio=13 />
 </Estilo>

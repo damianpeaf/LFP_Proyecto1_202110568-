@@ -1,50 +1,36 @@
 <Tipo>
-	OPERACION CON 2 NUMEROS PUROS
 	<Operacion= SUMA>
-			<Numero> 4.5 </Numero>
-			<Numero> 5.32 </Numero>
+		<Numero> 4.5 </Numero>
+		<Numero> 5.32 </Numero>
 	</Operacion>
-
-	OPERACION CON 1 NUMERO Y OTRA OPERACION (EN ESE ORDEN)
-	<Operacion= SUMA>
-			<Numero> 5 </Numero>
-			<Operacion= SUMA>
-				<Numero> 4.5 </Numero>
-				<Numero> 5.32 </Numero>
-			</Operacion>
+	<Operacion= RESTA>
+		<Numero> 84 </Numero>
+		<Numero> 33.7 </Numero>
 	</Operacion>
-
-	OPERACION CON UNA OPERACION Y OTRO NUMERO(EN ESE ORDEN)
-	<Operacion= SUMA>
-			<Operacion= SUMA>
-				<Numero> 4.5 </Numero>
-				<Numero> 5.32 </Numero>
-			</Operacion>
-			<Numero> 5 </Numero>
+	<Operacion= MULTIPLICACION>	
+		<Numero> 5 </Numero>
+		<Numero> 7 </Numero>
 	</Operacion>
-
-	DOS OPERACIONES
+	<Operacion= MOD>
+		<Numero> 45 </Numero>
+		<Numero> 9 </Numero>
+	</Operacion>
 	<Operacion= SUMA>
-		<Operacion= SENO>
-			<Numero> 7 </Numero>
-			<Numero> 5.32 </Numero>
-		</Operacion>
-		<Operacion= SUMA>
-			<Numero> 4.5 </Numero>
-			<Numero> 5.32 </Numero>
+		<Numero> 5.4 </Numero>
+		<Operacion= MULTIPLICACION>
+			<Numero> 7.8 </Numero>
+			<Numero> 4.3 </Numero>
 		</Operacion>
 	</Operacion>
 </Tipo>
 <Texto>
 	Realizar las operaciones básicas de suma, resta, multiplicación y división, así como operaciones complejas.
 </Texto>
-
 <Funcion = ESCRIBIR>
 	<Titulo> Operaciones </Titulo>
 	<Descripcion> [TEXTO] </Descripcion>
 	<Contenido> [TIPO] </Contenido>
 </Funcion>
-
 <Estilo>
 	<Titulo Color=AZUL Tamanio=12/>
 	<Descripcion Color=VERDE Tamanio=3/>

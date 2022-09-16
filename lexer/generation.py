@@ -1,6 +1,7 @@
 
 
 import math
+from turtle import pos
 from lexer.htmlParser import HtmlParser
 from lexer.lexer import Lexer
 from tokens.Operation import OperationType
@@ -252,39 +253,59 @@ class Generation():
                         analizedToken, number1Token.value, number2Token.value)
 
                 # ? has 1 pure number and 1 operation
-                elif (number1Token.tokenType == TokenType.NUMBER and (number2Token.tokenType == TokenType.OPEN_TAG and number2Token.operation)) or (number2Token.tokenType == TokenType.NUMBER and (number1Token.tokenType == TokenType.OPEN_TAG and number1Token.operation)):
-
-                    # * Number 2 is the operation
-                    if number2Token.tokenType == TokenType.OPEN_TAG and number2Token.operation:
-                        partialResult = Generation.evalExpresion(tokenNumber+2)
-                        expStr = Generation.evalOperationAsString(
-                            analizedToken, number1Token.value, "("+partialResult['expStr']+")")
-                        expResult = Generation.evalOperation(
-                            analizedToken, number1Token.value, partialResult['result'])
+                # * Number 1 -> number ; Number 2 -> operation
+                elif number1Token.tokenType == TokenType.NUMBER and (number2Token.tokenType == TokenType.OPEN_TAG and number2Token.operation):
+                    partialResult = Generation.evalExpresion(tokenNumber+2)
+                    expStr = Generation.evalOperationAsString(
+                        analizedToken, number1Token.value, "("+partialResult['expStr']+")")
+                    expResult = Generation.evalOperation(
+                        analizedToken, number1Token.value, partialResult['result'])
 
                     # ! NEEDS TO FIND THE 2ND NUMBER
                     # ! THIS ALSO INCLUDES THE CASE THAT THE 2ND NUMBER IS AN OPERATION
                     # * Number 1 is the operation
-                    else:
-                        partialResult = Generation.evalExpresion(tokenNumber+1)
+                    # 2 posibilites, n2 is number, or n2 is operation
+                else:
+                    if number1Token.tokenType == TokenType.OPEN_TAG and number1Token.operation:
 
-                        # for newNumber2TokenNumber in range(tokenNumber+2, )
+                        # Eval n1 (first operation)
+                        partialResult1 = Generation.evalExpresion(
+                            tokenNumber+1)
 
-                        expStr = Generation.evalOperationAsString(
-                            analizedToken, "("+partialResult['expStr']+")", number2Token.value)
-                        expResult = Generation.evalOperation(
-                            analizedToken, partialResult['result'], number2Token.value)
 
-                # ! NEEDS TO FIND THE 2ND OPERATION
-                # ? has 2 operations
-                elif (number1Token.tokenType == TokenType.OPEN_TAG and number1Token.operation) and (number2Token.tokenType == TokenType.OPEN_TAG and number2Token.operation):
-                    partialResult1 = Generation.evalExpresion(tokenNumber+1)
-                    partialResult2 = Generation.evalExpresion(tokenNumber+2)
-                    expStr = Generation.evalOperationAsString(
-                        analizedToken, "("+partialResult1['expStr']+")", "("+partialResult2['expStr']+")")
-                    expResult = Generation.evalOperation(
-                        analizedToken, partialResult1['result'], partialResult2['result'])
+                        # find the closing tag of the first operation, needs to find 1 closing tag
+                        newNumber2TokenNumber = 0
+                        needsToFind = 1
+                        for posibleTokenNumber in range(tokenNumber+2, len(tokens)):
+                            posibleToken = tokens[posibleTokenNumber]
+                            print(posibleToken.value)
+                            print(posibleToken.tokenType.name)
+                            if posibleToken.tokenType == TokenType.OPEN_TAG:
+                                needsToFind += 1
+                            elif posibleToken.tokenType == TokenType.CLOSING_TAG:
+                                needsToFind -= 1
+                                if needsToFind == 0:
+                                    newNumber2TokenNumber = posibleTokenNumber+1
+                                    break
 
+                        # 2 posibilites, n2 is number, or n2 is operation
+                        # n2 is number
+                        number2Token = tokens[newNumber2TokenNumber]
+                        if number2Token.tokenType == TokenType.NUMBER:
+                            expStr = Generation.evalOperationAsString(
+                                analizedToken, "("+partialResult1['expStr']+")", number2Token.value)
+                            expResult = Generation.evalOperation(
+                                analizedToken, partialResult1['result'], number2Token.value)
+                        # n2 is operation
+                        elif number2Token.tokenType == TokenType.OPEN_TAG and number2Token.operation:
+                            partialResult2 = Generation.evalExpresion(
+                                newNumber2TokenNumber)
+                            expStr = Generation.evalOperationAsString(
+                                analizedToken, "("+partialResult1['expStr']+")", "("+partialResult2['expStr']+")")
+                            expResult = Generation.evalOperation(
+                                analizedToken, partialResult1['result'], partialResult2['result'])
+                        else:
+                            print('THIS NOT VALIDATED')
             # * Operation with 1 number
             elif operationType == OperationType.SENO or operationType == OperationType.COSENO or operationType == OperationType.TANGENTE or operationType == OperationType.INVERSO:
                 # ? has 1 pure number
@@ -314,7 +335,7 @@ class Generation():
             print(e)
             pass
 
-    @staticmethod
+    @ staticmethod
     def evalOperation(parentToken: Token, n1: float, n2: float):
         operation = parentToken.operation.operationType
 
@@ -346,7 +367,7 @@ class Generation():
             print('OPERACION NO REALIZADA')
             pass
 
-    @staticmethod
+    @ staticmethod
     def evalOperationAsString(parentToken: Token, n1: str, n2: str):
         operation = parentToken.operation.operationType
 
@@ -380,3 +401,13 @@ class Generation():
             print(operation)
             print('EXP STRING NO REALIZADA')
             pass
+
+            # # ! NEEDS TO FIND THE 2ND OPERATION
+            # # ? has 2 operations
+            # elif (number1Token.tokenType == TokenType.OPEN_TAG and number1Token.operation) and (number2Token.tokenType == TokenType.OPEN_TAG and number2Token.operation):
+            #     partialResult1 = Generation.evalExpresion(tokenNumber+1)
+            #     partialResult2 = Generation.evalExpresion(tokenNumber+2)
+            #     expStr = Generation.evalOperationAsString(
+            #         analizedToken, "("+partialResult1['expStr']+")", "("+partialResult2['expStr']+")")
+            #     expResult = Generation.evalOperation(
+            #         analizedToken, partialResult1['result'], partialResult2['result'])

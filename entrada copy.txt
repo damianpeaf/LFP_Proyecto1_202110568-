@@ -26,13 +26,11 @@
 <Texto>
 	Realizar las operaciones básicas de suma, resta, multiplicación y división, así como operaciones complejas.
 </Texto>
-
 <Funcion = ESCRIBIR>
 	<Titulo> Operaciones </Titulo>
 	<Descripcion> [TEXTO] </Descripcion>
 	<Contenido> [TIPO] </Contenido>
 </Funcion>
-
 <Estilo>
 	<Titulo Color=AZUL Tamanio=12/>
 	<Descripcion Color=VERDE Tamanio=3/>

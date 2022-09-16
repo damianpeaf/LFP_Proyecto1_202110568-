@@ -87,6 +87,8 @@ ALPHABET = [
     '[',
     ']',
     ' ',
+    '(',
+    ')',
     # ? Other symbols,
     ',',
 ]

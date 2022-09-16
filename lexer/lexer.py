@@ -10,12 +10,28 @@ class Lexer():
     tokenFlow: List[Token] = []
     lexicErrors: List[LexerError] = []
 
+    validOpenAndClosingTags = ['Tipo', 'Operacion', 'Texto', 'Funcion',
+                               'Estilo', 'Numero', 'Titulo', 'Descripcion', 'Contenido']
+    validAutoclosingTags = ['Titulo', 'Descripcion', 'Contenido']
+
     def __init__(self):
         pass
 
     @staticmethod
     def addToken(token: Token):
         Lexer.tokenFlow.append(token)
+
+    @staticmethod
+    def getCriticalErrors():
+        criticalErrors : List[LexerError]= []
+        for error in Lexer.lexicErrors:
+            if error.type == LexerErrorType.INVALID_CHARACTER or error.type ==  LexerErrorType.INCOMPLETE_LEXEME:
+                continue          
+            elif error.type ==  LexerErrorType.INVALID_OPERATION or error.type ==  LexerErrorType.INVALID_TAG or error.type ==  LexerErrorType.INVALID_OPERATION_ASSIGMENT or error.type ==  LexerErrorType.INVALID_OPERATION_TAG or error.type ==  LexerErrorType.EXPECTED_CONTENT or error.type ==  LexerErrorType.EXPECTED_NUMBER or error.type ==  LexerErrorType.EXPECTED_CLOSING_TAG or error.type ==  LexerErrorType.MISSING_CLOSING_TAG:
+                criticalErrors.append(error)
+
+        return criticalErrors
+
 
     @staticmethod
     def addError(error: LexerError):
@@ -28,8 +44,66 @@ class Lexer():
 
     @staticmethod
     def generateIntermdiateTokens():
+        Lexer.evaluateValidTags()
+        Lexer.evaluateClosingTags()
         Lexer.generateNumbers()
         Lexer.generateOperationTokens()
+
+    @staticmethod
+    def evaluateValidTags():
+        for token in Lexer.tokenFlow:
+
+            # * Validates if number or content
+            if token.tokenType == TokenType.NUMBER or token.tokenType == TokenType.CONTENT:
+                continue
+
+            formatedTokenValue = token.getMainValue()
+
+            if token.tokenType == TokenType.OPEN_TAG or token.tokenType == TokenType.CLOSING_TAG:
+                # * Valid token value
+                if formatedTokenValue in Lexer.validOpenAndClosingTags:
+                    continue
+            # * Same for autoclosing tags
+            elif token.tokenType == TokenType.AUTOCLOSING_TAG:
+                if formatedTokenValue in Lexer.validAutoclosingTags:
+                    continue
+
+            # ! Then is an error
+            # * Remove token from the flow
+            Lexer.tokenFlow.remove(token)
+
+            # * Generate error
+
+            Lexer.addError(LexerError(LexerErrorType.INVALID_TAG,
+                           formatedTokenValue, 'Etiqueta invalida', token.col, token.row))
+
+    @staticmethod
+    def evaluateClosingTags():
+        for tokenNumber in range(0, len(Lexer.tokenFlow)):
+            analyzedToken = Lexer.tokenFlow[tokenNumber]
+            # * If its a open tag token
+            if analyzedToken.tokenType == TokenType.OPEN_TAG:
+                # * Search for its closing tag, needs to find 1 closing tag
+                needToFind = 1
+                for nextTokenNumber in range(tokenNumber+1, len(Lexer.tokenFlow)):
+                    nextToken = Lexer.tokenFlow[nextTokenNumber]
+                    # * if finds same open tag value, needs to skip +1 closing tag
+                    sameValue = nextToken.getMainValue() == analyzedToken.getMainValue()
+                    if nextToken.tokenType == TokenType.OPEN_TAG:
+                        if sameValue:
+                            needToFind += 1
+                    # * If finds a closing tag, eval if have to skip it
+                    elif nextToken.tokenType == TokenType.CLOSING_TAG:
+                        # * It haves a closing tag
+                        if sameValue:
+                            needToFind -= 1
+                            if needToFind == 0:
+                                break
+
+                    # * If eval all tokens
+                    if nextTokenNumber == len(Lexer.tokenFlow) - 1:
+                        Lexer.addError(LexerError(LexerErrorType.MISSING_CLOSING_TAG, analyzedToken.value,
+                                       'Hace falta la etiqueta de cierre', analyzedToken.row, analyzedToken.col))
 
     @staticmethod
     def generateNumbers():
@@ -42,7 +116,7 @@ class Lexer():
                 nextNextToken = Lexer.tokenFlow[tokenNumber+2]
 
                 if token.tokenType == TokenType.OPEN_TAG:
-                    if token.value.upper() == "NUMERO":
+                    if token.getMainValue() == "Numero":
                         if nextToken.tokenType == TokenType.CONTENT:
                             try:
                                 number = float(nextToken.value)
@@ -91,9 +165,9 @@ class Lexer():
             tokenProps = formatedTokenValue.split("=")
 
             # * valid props
-            if tokenProps[0].upper() == 'OPERACION' or tokenProps[0].upper() == 'FUNCION':
+            if tokenProps[0] == 'Operacion' or tokenProps[0] == 'Funcion':
                 if len(tokenProps) == 2:
-                    if tokenProps[0].upper() == 'OPERACION' or tokenProps[0].upper() == 'FUNCION':
+                    if tokenProps[0] == 'Operacion' or tokenProps[0] == 'Funcion':
                         # * Is a operation/fuction
 
                         operation = None

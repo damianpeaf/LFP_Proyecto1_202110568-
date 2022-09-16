@@ -3,6 +3,7 @@ from tkinter import filedialog
 from tkinter import messagebox
 from os.path import exists
 from lexer.analyzeFile import analyzeFile
+from lexer.generation import Generation
 
 from lexer.lexer import Lexer
 
@@ -57,6 +58,7 @@ class FileEditor():
 
     def refreshEditor(self):
         try:
+            self.messageLabel.config(text=self.filePath)
             file = open(self.filePath, 'r', encoding="utf-8", errors='ignore')
             self.editor.delete('1.0', END)
             self.editor.insert(END, file.read())
@@ -68,6 +70,11 @@ class FileEditor():
 
     def analyze(self):
         analyzeFile(self.filePath)
+        correct = Generation.generateHTML()
+
+        if not correct:
+            messagebox.showerror(
+                title="Error", message="Hay errores dentro del archivo, por favor genere la lista de errores para un mayor detalle")
 
     def initUI(self):
         buttonFont = ("Helvetica", 10, "bold")
@@ -131,7 +138,7 @@ class FileEditor():
         self.buttonsFrame.pack()
 
         self.messageLabel = Label(
-            self.window, text="MENSAJES: ", bg='#1B1F3B', fg='white', font=messagesFont, pady=5)
+            self.window, text="archivo no seleccionado", bg='#1B1F3B', fg='white', font=messagesFont, pady=5)
         self.messageLabel.pack(fill="x")
 
         self.editor = Text(self.window, bg='#1B1F3B', fg='white')

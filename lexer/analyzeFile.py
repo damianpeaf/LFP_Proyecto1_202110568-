@@ -7,9 +7,7 @@ from tokens.Token import Token, TokenType
 
 def analyzeFile(path: str):
 
-    Lexer.tokenFlow = []
-    Lexer.lexicErrors = []
-
+    Lexer.reset()
     dfa = languageDFA()
 
     file = open(path, 'r', encoding='utf-8')
@@ -19,6 +17,7 @@ def analyzeFile(path: str):
     row = 1
     for line in lines:
         line = line.replace('\n', '')
+        line = line.replace('\t', '')
         column = 1
 
         i = 0
@@ -32,30 +31,38 @@ def analyzeFile(path: str):
 
             if isinstance(dfaResp, Token):
 
+                # Useless blank space
+                if dfaResp.tokenType == TokenType.CONTENT:
+                    if dfaResp.value.strip() == '':
+                        column += 1
+                        i += 1
+                        dfa.reset()
+                        continue
+
                 # ! VALIDATE TOKEN TYPE ERROR
                 if dfaResp.tokenType == TokenType.ERROR:
                     # just a blank space
-                    if dfaResp.value.strip() == '':
-                        # print('monton de espcios en blanco')
-                        pass
-                    elif len(dfaResp.value) == 1:
+                    if len(dfaResp.value) == 1:
                         Lexer.addError(
                             LexerError(LexerErrorType.INVALID_CHARACTER,
                                        dfaResp.value, 'Caracter invalido', row, column)
                         )
+                        dfa.reset()
+                        # * Doest reset for posible valid lexeme
 
                     else:
                         Lexer.addError(
                             LexerError(LexerErrorType.INCOMPLETE_LEXEME,
                                        dfaResp.value, 'Lexema incompleto o invalido', row, column)
                         )
+                        # * Reset for next lexeme
+
                     column += 1
                     i += 1
                     dfa.reset()
                     continue
 
                 Lexer.addToken(dfaResp)
-
                 # ! New lexeme
                 if dfa.validCharacter == False:
                     dfa.reset()
@@ -67,9 +74,11 @@ def analyzeFile(path: str):
             column += 1
 
         row += 1
+    Lexer.generateIntermdiateTokens()
 
     print(' \n TOKEN GENERADOS : \n')
 
+    tokenNumber = 0
     for token in Lexer.tokenFlow:
 
         operation = "-"
@@ -78,11 +87,8 @@ def analyzeFile(path: str):
             operation = token.operation.operationType.name
 
         print(
-            f'TIPO:  {token.tokenType} VALUE: {token.value} ')
-    Lexer.generateIntermdiateTokens()
-
-    Generation.generateHTML()
-
+            f'#{str(tokenNumber)} TIPO:  {token.tokenType} VALUE: {token.value} ')
+        tokenNumber += 1
     print(' \n ERRORES GENERADOS : \n')
 
     for error in Lexer.lexicErrors:

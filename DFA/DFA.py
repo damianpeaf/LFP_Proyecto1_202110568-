@@ -101,6 +101,7 @@ class DFA ():
 
     def cleanLexeme(self):
         return self.lexeme.replace('<', '').replace('>', '').replace('/', '')
+        # return self.lexeme
 
     def reset(self):
         # * reset eval props

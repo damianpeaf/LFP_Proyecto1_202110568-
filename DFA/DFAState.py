@@ -18,5 +18,5 @@ class DFAState():
             self.tokenType = tokenType
         else:
             if tokenType:
-                # ! DELETE THIS AFTER
-                print('No se esperaba que este estado generara un token')
+                # print('No se esperaba que este estado generara un token')
+                pass

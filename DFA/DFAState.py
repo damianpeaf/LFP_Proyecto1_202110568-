@@ -1,11 +1,8 @@
 
 
-from tokens.Token import TokenType
-
-
 class DFAState():
 
-    def __init__(self, number: int, isAcceptance: bool = False, tokenType: TokenType = None):
+    def __init__(self, number: int, isAcceptance: bool = False, tokenType=None):
         try:
             self.number = int(number)
         except:

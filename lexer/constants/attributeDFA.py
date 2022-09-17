@@ -1,7 +1,6 @@
 
 
 from typing import List
-from DFA.DFA import DFA
 from DFA.DFA2 import DFA2
 from DFA.DFAState import DFAState
 from DFA.DFATransitionFunction import DFATransitionFunction

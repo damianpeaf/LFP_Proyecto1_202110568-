@@ -1,5 +1,3 @@
-
-
 from typing import List
 from DFA.DFA import DFA
 from DFA.DFAState import DFAState

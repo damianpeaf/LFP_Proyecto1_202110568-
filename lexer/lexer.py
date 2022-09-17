@@ -1,6 +1,6 @@
 
 from typing import List
-from errors.LexicError import LexerError, LexerErrorType
+from errors.LexicError import DocumentError, ErrorType
 from tokens.Operation import Operation, OperationType
 from tokens.Token import Token, TokenType
 
@@ -8,7 +8,7 @@ from tokens.Token import Token, TokenType
 class Lexer():
 
     tokenFlow: List[Token] = []
-    lexicErrors: List[LexerError] = []
+    documentErrors: List[DocumentError] = []
 
     validOpenAndClosingTags = ['Tipo', 'Operacion', 'Texto', 'Funcion',
                                'Estilo', 'Numero', 'Titulo', 'Descripcion', 'Contenido']
@@ -23,24 +23,23 @@ class Lexer():
 
     @staticmethod
     def getCriticalErrors():
-        criticalErrors : List[LexerError]= []
-        for error in Lexer.lexicErrors:
-            if error.type == LexerErrorType.INVALID_CHARACTER or error.type ==  LexerErrorType.INCOMPLETE_LEXEME:
-                continue          
-            elif error.type ==  LexerErrorType.INVALID_OPERATION or error.type ==  LexerErrorType.INVALID_TAG or error.type ==  LexerErrorType.INVALID_OPERATION_ASSIGMENT or error.type ==  LexerErrorType.INVALID_OPERATION_TAG or error.type ==  LexerErrorType.EXPECTED_CONTENT or error.type ==  LexerErrorType.EXPECTED_NUMBER or error.type ==  LexerErrorType.EXPECTED_CLOSING_TAG or error.type ==  LexerErrorType.MISSING_CLOSING_TAG:
+        criticalErrors: List[DocumentError] = []
+        for error in Lexer.documentErrors:
+            if error.type == ErrorType.INVALID_CHARACTER or error.type == ErrorType.INCOMPLETE_LEXEME:
+                continue
+            elif error.type == ErrorType.INVALID_OPERATION or error.type == ErrorType.INVALID_TAG or error.type == ErrorType.INVALID_OPERATION_ASSIGMENT or error.type == ErrorType.INVALID_OPERATION_TAG or error.type == ErrorType.EXPECTED_CONTENT or error.type == ErrorType.EXPECTED_NUMBER or error.type == ErrorType.EXPECTED_CLOSING_TAG or error.type == ErrorType.MISSING_CLOSING_TAG:
                 criticalErrors.append(error)
 
         return criticalErrors
 
-
     @staticmethod
-    def addError(error: LexerError):
-        Lexer.lexicErrors.append(error)
+    def addError(error: DocumentError):
+        Lexer.documentErrors.append(error)
 
     @staticmethod
     def reset():
         Lexer.tokenFlow = []
-        Lexer.lexicErrors = []
+        Lexer.documentErrors = []
 
     @staticmethod
     def generateIntermdiateTokens():
@@ -74,7 +73,7 @@ class Lexer():
 
             # * Generate error
 
-            Lexer.addError(LexerError(LexerErrorType.INVALID_TAG,
+            Lexer.addError(DocumentError(ErrorType.INVALID_TAG,
                            formatedTokenValue, 'Etiqueta invalida', token.col, token.row))
 
     @staticmethod
@@ -102,7 +101,7 @@ class Lexer():
 
                     # * If eval all tokens
                     if nextTokenNumber == len(Lexer.tokenFlow) - 1:
-                        Lexer.addError(LexerError(LexerErrorType.MISSING_CLOSING_TAG, analyzedToken.value,
+                        Lexer.addError(DocumentError(ErrorType.MISSING_CLOSING_TAG, analyzedToken.value,
                                        'Hace falta la etiqueta de cierre', analyzedToken.row, analyzedToken.col))
 
     @staticmethod
@@ -127,15 +126,15 @@ class Lexer():
                                     Lexer.tokenFlow.remove(nextToken)
                                     Lexer.tokenFlow.remove(nextNextToken)
                                 else:
-                                    Lexer.addError(LexerError(LexerErrorType.EXPECTED_CLOSING_TAG, nextToken.value,
+                                    Lexer.addError(DocumentError(ErrorType.EXPECTED_CLOSING_TAG, nextToken.value,
                                                    'Se esperaba una etiqueta de cierre', nextNextToken.row, nextNextToken.col))
 
                             except Exception as e:
                                 print(e)
-                                Lexer.addError(LexerError(
-                                    LexerErrorType.EXPECTED_NUMBER, nextToken.value, 'Se esperaba un numero', nextToken.row, nextToken.col))
+                                Lexer.addError(DocumentError(
+                                    ErrorType.EXPECTED_NUMBER, nextToken.value, 'Se esperaba un numero', nextToken.row, nextToken.col))
                         else:
-                            Lexer.addError(LexerError(LexerErrorType.EXPECTED_CONTENT, nextToken.value,
+                            Lexer.addError(DocumentError(ErrorType.EXPECTED_CONTENT, nextToken.value,
                                            'Se esperaba un contenido dentro de las etiquetas', nextToken.row, nextToken.col))
 
                         # token = Token(TokenType.NUMBER, token.value, token.row, token.column)
@@ -181,8 +180,8 @@ class Lexer():
                             token.operation = operation
                         else:
                             token.tokenType = TokenType.ERROR
-                            Lexer.addError(LexerError(LexerErrorType.INVALID_OPERATION,
-                                                      tokenProps[1], 'Operacion invalida', token.row, token.col))
+                            Lexer.addError(DocumentError(ErrorType.INVALID_OPERATION,
+                                                         tokenProps[1], 'Operacion invalida', token.row, token.col))
                 else:
-                    Lexer.addError(LexerError(LexerErrorType.INVALID_OPERATION_ASSIGMENT, token.value,
-                                              'Asignacion de operacion invalida', token.row, token.col))
+                    Lexer.addError(DocumentError(ErrorType.INVALID_OPERATION_ASSIGMENT, token.value,
+                                                 'Asignacion de operacion invalida', token.row, token.col))

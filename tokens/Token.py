@@ -1,6 +1,8 @@
 
 
 from enum import Enum, auto
+from typing import List
+from lexer.analyzeToken import analyzeToken
 from tokens.Operation import Operation
 
 
@@ -21,6 +23,13 @@ class Token():
         self.row = row
         self.col = col
         self.operation: Operation = None
+        self.auxTokens: List[Token] = []
+
+        if self.tokenType == TokenType.OPEN_TAG or self.tokenType == TokenType.AUTOCLOSING_TAG or self.tokenType == TokenType.CLOSING_TAG:
+            self.runAttibuteRecognition()
+
+    def runAttibuteRecognition(self):
+        self.auxTokens = analyzeToken(self.value)
 
     def getMainValue(self):
         # * Removes = and uses ' ' as delimiter for words
@@ -35,7 +44,6 @@ class Token():
         # NOMBRE COLOR=AZUL COLOR = AZUL
 
         wordsInTag = self.value.split(' ')
-        print(wordsInTag)
 
         atributes = []
         for word in wordsInTag:

@@ -3,7 +3,7 @@
 from enum import Enum, auto
 
 
-class LexerErrorType(Enum):
+class ErrorType(Enum):
     INVALID_CHARACTER = auto()
     INCOMPLETE_LEXEME = auto()
     INVALID_OPERATION = auto()
@@ -16,9 +16,9 @@ class LexerErrorType(Enum):
     MISSING_CLOSING_TAG = auto()
 
 
-class LexerError():
+class DocumentError():
 
-    def __init__(self, type: LexerErrorType, lexeme: str, msg: str = None, row: int = None, col: int = None):
+    def __init__(self, type: ErrorType, lexeme: str, msg: str = None, row: int = None, col: int = None):
         self.type = type
         self.lexeme = lexeme
 

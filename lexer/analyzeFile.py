@@ -1,6 +1,6 @@
-from errors.LexicError import LexerError, LexerErrorType
+from errors.LexicError import DocumentError, ErrorType
+from lexer.constants.attributeDFA import attributeDFA
 from lexer.constants.languageDFA import languageDFA
-from lexer.generation import Generation
 from lexer.lexer import Lexer
 from tokens.Token import Token, TokenType
 
@@ -34,9 +34,9 @@ def analyzeFile(path: str):
                 # Useless blank space
                 if dfaResp.tokenType == TokenType.CONTENT:
                     if dfaResp.value.strip() == '':
-                        column += 1
-                        i += 1
                         dfa.reset()
+                        if not isCharacterNext:
+                            i += 1
                         continue
 
                 # ! VALIDATE TOKEN TYPE ERROR
@@ -44,16 +44,15 @@ def analyzeFile(path: str):
                     # just a blank space
                     if len(dfaResp.value) == 1:
                         Lexer.addError(
-                            LexerError(LexerErrorType.INVALID_CHARACTER,
-                                       dfaResp.value, 'Caracter invalido', row, column)
+                            DocumentError(ErrorType.INVALID_CHARACTER,
+                                          dfaResp.value, 'Caracter invalido', row, column)
                         )
-                        dfa.reset()
                         # * Doest reset for posible valid lexeme
 
                     else:
                         Lexer.addError(
-                            LexerError(LexerErrorType.INCOMPLETE_LEXEME,
-                                       dfaResp.value, 'Lexema incompleto o invalido', row, column)
+                            DocumentError(ErrorType.INCOMPLETE_LEXEME,
+                                          dfaResp.value, 'Lexema incompleto o invalido', row, column)
                         )
                         # * Reset for next lexeme
 
@@ -74,6 +73,7 @@ def analyzeFile(path: str):
             column += 1
 
         row += 1
+        print(row)
     Lexer.generateIntermdiateTokens()
 
     print(' \n TOKEN GENERADOS : \n')
@@ -91,6 +91,6 @@ def analyzeFile(path: str):
         tokenNumber += 1
     print(' \n ERRORES GENERADOS : \n')
 
-    for error in Lexer.lexicErrors:
+    for error in Lexer.documentErrors:
         print(
             f'TIPO:  {error.type} - VALUE: {error.lexeme} - COL: {error.column} - ROW: {error.row}')

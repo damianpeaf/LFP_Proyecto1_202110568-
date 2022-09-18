@@ -4,6 +4,7 @@ from DFA.DFAState import DFAState
 from DFA.DFATransitionFunction import DFATransitionFunction
 from lexer.constants.alphabet import ALPHABET
 from lexer.constants.digit import DIGITS
+from lexer.constants.letter import LETTERS
 from tokens.auxTokens import AuxToken, AuxTokenTypes
 import graphviz
 
@@ -85,8 +86,10 @@ class DFA2 ():
 
             label = ""
             # * Label abreviation for all digits
-            if function.characters == DIGITS:
-                label = "D"
+            if function.characters == LETTERS:
+                label = "L"
+            elif function.characters == [' ']:
+                label = "b"
             else:
                 label = ', '.join(function.characters)
 

@@ -51,7 +51,7 @@
 </Funcion>
 
 <Estilo>
-      <Titulo Color=AZUL Tamanio=12/> 
+      <Titulo Color = ROJO Tamanio=12/> 
       <Descripcion Color=VERDE Tamanio=3/> 
       <Contenido Color=GRIS Tamanio=3/>
 </Estilo>

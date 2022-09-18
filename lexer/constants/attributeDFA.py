@@ -20,7 +20,7 @@ def attributeDFA():
     firstStateTransitionFunction1 = DFATransitionFunction(
         initialState, firstState, LETTERS)
     firstStateTransitionFunction2 = DFATransitionFunction(
-        firstState, firstState, [' '])
+        firstState, firstState, LETTERS)
 
     # * Second state
     secondState = DFAState(2, True, AuxTokenTypes.MAIN_VALUE)
@@ -39,18 +39,18 @@ def attributeDFA():
         thirdState, thirdState, [' '])
 
     # * Fourth State
-    fourthState = DFAState(4)
+    fourthState = DFAState(4, True, AuxTokenTypes.ATTRIBUTE)
     fourthStateTransitionFunction1 = DFATransitionFunction(
         thirdState, fourthState, LETTERS)
     fourthStateTransitionFunction2 = DFATransitionFunction(
         fourthState, fourthState, LETTERS)
 
-    # * Fifth State
-    fifthState = DFAState(5, True, AuxTokenTypes.ATTRIBUTE)
-    fifthStateTransitionFunction1 = DFATransitionFunction(
-        fourthState, fifthState, [' '])
-    fifthStateTransitionFunction2 = DFATransitionFunction(
-        fifthState, fifthState, [' '])
+    # # * Fifth State
+    # fifthState = DFAState(5, True, AuxTokenTypes.ATTRIBUTE)
+    # fifthStateTransitionFunction1 = DFATransitionFunction(
+    #     fourthState, fifthState, [' '])
+    # fifthStateTransitionFunction2 = DFATransitionFunction(
+    #     fifthState, fifthState, [' '])
 
     # * ADD STATE
     states: List[DFAState] = [
@@ -58,7 +58,6 @@ def attributeDFA():
         secondState,
         thirdState,
         fourthState,
-        fifthState
     ]
 
     # * ADD FUNCTIONS
@@ -73,8 +72,6 @@ def attributeDFA():
         thirdStateTransitionFunction3,
         fourthStateTransitionFunction1,
         fourthStateTransitionFunction2,
-        fifthStateTransitionFunction1,
-        fifthStateTransitionFunction2
     ]
 
     return DFA2(initialState, states, functions)

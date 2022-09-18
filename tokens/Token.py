@@ -4,6 +4,7 @@ from enum import Enum, auto
 from typing import List
 from lexer.analyzeToken import analyzeToken
 from tokens.Operation import Operation
+from tokens.auxTokens import AuxTokenTypes
 
 
 class TokenType(Enum):
@@ -25,25 +26,22 @@ class Token():
         self.operation: Operation = None
         self.auxTokens: List[Token] = []
 
-        if self.tokenType == TokenType.OPEN_TAG or self.tokenType == TokenType.AUTOCLOSING_TAG or self.tokenType == TokenType.CLOSING_TAG:
-            self.runAttibuteRecognition()
-
     def runAttibuteRecognition(self):
         self.auxTokens = analyzeToken(self.value)
 
     def getMainValue(self):
         # * Removes = and uses ' ' as delimiter for words
-        formatedTokenValue = self.value.replace('=', ' ')
-        formatedTokenValue = formatedTokenValue.split(' ')
-        if '' in formatedTokenValue:
-            formatedTokenValue.remove('')
-
-        return formatedTokenValue[0]
+        self.runAttibuteRecognition()
+        return self.auxTokens[0].value.replace(' ', '').split('=')[0]
 
     def getAtributes(self):
         # NOMBRE COLOR=AZUL COLOR = AZUL
+        self.runAttibuteRecognition()
+        wordsInTag = []
 
-        wordsInTag = self.value.split(' ')
+        for token in self.auxTokens:
+            if token.tokenType == AuxTokenTypes.ATTRIBUTE:
+                wordsInTag.append(token.value.replace(' ', ''))
 
         atributes = []
         for word in wordsInTag:

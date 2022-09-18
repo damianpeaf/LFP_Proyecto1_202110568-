@@ -2,6 +2,7 @@
 
 from lib2to3.pytree import convert
 import math
+from pprint import pprint
 from turtle import pos
 from lexer.htmlParser import HtmlParser
 from lexer.lexer import Lexer
@@ -27,9 +28,11 @@ class Generation():
 
         # 3 phases, scope, references/documentStructure, and html generation
 
+        print(' \n OPERACIONES : \n')
         scopes = Generation.languageScopes()
+
+        print(' \n ESTRUCTURA : \n')
         documentStructure = Generation.documentStructure(scopes)
-        print(documentStructure)
         HtmlParser(documentStructure).createFile()
 
         return True
@@ -136,6 +139,8 @@ class Generation():
 
             tokenNumber += 1
 
+        pprint(documentParts)
+
         return documentParts
 
     @staticmethod
@@ -151,18 +156,22 @@ class Generation():
 
         actualScope = []
         # * General operations (Text and Math operations)
+
+        operationType = ""
         while tokenNumber < len(tokens):
             analizedToken = Lexer.tokenFlow[tokenNumber]
 
             # * Select the scope
             if analizedToken.tokenType == TokenType.OPEN_TAG and analizedToken.getMainValue().upper() == 'TEXTO':
                 actualScope = documentScopes["TEXTO"]
+                print("\n\nSCOPE: TEXTO \n")
                 tokenNumber += 1
                 continue
 
             elif analizedToken.tokenType == TokenType.OPEN_TAG and analizedToken.getMainValue().upper() == 'TIPO':
                 actualScope = documentScopes["TIPO"]
                 tokenNumber += 1
+                print("\n\nSCOPE: TIPO \n")
                 continue
 
             # * Skip tags
@@ -194,8 +203,9 @@ class Generation():
             # * Math operation
             if analizedToken.tokenType == TokenType.OPEN_TAG and analizedToken.operation and analizedToken.operation.operationType != OperationType.ESCRIBIR:
                 operationAsString = Generation.makeOperation(tokenNumber)
-                scopeObject = operationAsString + \
+                scopeObject = operationAsString.replace('math.', '') + \
                     " = " + str(eval(operationAsString))
+                operationType = "CALCULAR"
 
                 # Go to closing tag
 
@@ -204,10 +214,11 @@ class Generation():
             # * Just content
             if analizedToken.tokenType == TokenType.CONTENT:
                 scopeObject = analizedToken.value
+                operationType = "ESCRIBIR"
 
             # * Add the object to the scope
             if scopeObject:
-                print(scopeObject)
+                print(operationType + " : " + scopeObject)
                 actualScope.append(scopeObject)
 
             tokenNumber += 1

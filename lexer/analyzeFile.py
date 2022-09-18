@@ -47,6 +47,9 @@ def analyzeFile(path: str):
                             DocumentError(ErrorType.INVALID_CHARACTER,
                                           dfaResp.value, 'Caracter invalido', row, column)
                         )
+                        column += 1
+                        i += 1
+                        continue
                         # * Doest reset for posible valid lexeme
 
                     else:
@@ -73,7 +76,6 @@ def analyzeFile(path: str):
             column += 1
 
         row += 1
-        print(row)
     Lexer.generateIntermdiateTokens()
 
     print(' \n TOKEN GENERADOS : \n')

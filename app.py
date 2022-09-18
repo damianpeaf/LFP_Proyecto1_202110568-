@@ -1,3 +1,4 @@
+from lexer.constants.attributeDFA import attributeDFA
 from views.MainMenu import MainMenu
 
 

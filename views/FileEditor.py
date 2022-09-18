@@ -68,10 +68,13 @@ class FileEditor():
             messagebox.showwarning(
                 title="Aviso", message="Error al leer el archivo")
 
+    def errors(self):
+        analyzeFile(self.filePath)
+        correct = Generation.generateHTML(errors=True)
+
     def analyze(self):
         analyzeFile(self.filePath)
         correct = Generation.generateHTML()
-
         if not correct:
             messagebox.showerror(
                 title="Error", message="Hay errores dentro del archivo, por favor genere la lista de errores para un mayor detalle")
@@ -124,7 +127,8 @@ class FileEditor():
                padx=10,
                bg="#E0C302",
                fg="white",
-               font=buttonFont).grid(row=0, column=4)
+               font=buttonFont,
+               command=self.errors).grid(row=0, column=4)
 
         Button(self.buttonsFrame,
                text="Salir",

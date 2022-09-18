@@ -37,7 +37,6 @@
            	</Operacion>
       </Operacion>
 </Operacion>
-
 </Tipo>
 
 <Texto>

@@ -5,6 +5,7 @@ import math
 from pprint import pprint
 from turtle import pos
 from lexer.htmlParser import HtmlParser
+from lexer.htmlParser2 import HtmlParser2
 from lexer.lexer import Lexer
 from lexer.utils.closingTag import getClosingTagNumber
 from tokens.Operation import OperationType
@@ -19,9 +20,12 @@ class Generation():
         pass
 
     @staticmethod
-    def generateHTML():
+    def generateHTML(errors=False):
 
         criticalErrors = Lexer.getCriticalErrors()
+        if errors:
+            HtmlParser2().createFile()
+            return True
 
         if len(criticalErrors) > 0:
             return False
@@ -33,6 +37,7 @@ class Generation():
 
         print(' \n ESTRUCTURA : \n')
         documentStructure = Generation.documentStructure(scopes)
+
         HtmlParser(documentStructure).createFile()
 
         return True

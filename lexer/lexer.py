@@ -25,12 +25,19 @@ class Lexer():
     def getCriticalErrors():
         criticalErrors: List[DocumentError] = []
         for error in Lexer.documentErrors:
-            if error.type == ErrorType.INVALID_CHARACTER or error.type == ErrorType.INCOMPLETE_LEXEME:
-                continue
-            elif error.type == ErrorType.INVALID_OPERATION or error.type == ErrorType.INVALID_TAG or error.type == ErrorType.INVALID_OPERATION_ASSIGMENT or error.type == ErrorType.INVALID_OPERATION_TAG or error.type == ErrorType.EXPECTED_CONTENT or error.type == ErrorType.EXPECTED_NUMBER or error.type == ErrorType.EXPECTED_CLOSING_TAG or error.type == ErrorType.MISSING_CLOSING_TAG:
+            if error.type == ErrorType.INVALID_OPERATION or error.type == ErrorType.INVALID_TAG or error.type == ErrorType.INVALID_OPERATION_ASSIGMENT or error.type == ErrorType.INVALID_OPERATION_TAG or error.type == ErrorType.EXPECTED_CONTENT or error.type == ErrorType.EXPECTED_NUMBER or error.type == ErrorType.EXPECTED_CLOSING_TAG or error.type == ErrorType.MISSING_CLOSING_TAG:
                 criticalErrors.append(error)
 
         return criticalErrors
+
+    @staticmethod
+    def getTolerableErrors():
+        tolerableErrors: List[DocumentError] = []
+        for error in Lexer.documentErrors:
+            if error.type == ErrorType.INVALID_CHARACTER or error.type == ErrorType.INCOMPLETE_LEXEME:
+                tolerableErrors.append(error)
+
+        return tolerableErrors
 
     @staticmethod
     def addError(error: DocumentError):

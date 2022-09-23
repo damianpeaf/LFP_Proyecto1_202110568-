@@ -1,3 +1,4 @@
+import os
 from typing import List
 import webbrowser
 from errors.LexicError import DocumentError
@@ -22,8 +23,10 @@ class HtmlParser2():
             file.write(self.htmlStr)
             file.close()
 
-            webbrowser.get("C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s").open_new_tab(
-                "file:///E:/U/SegundoAno2022/SegundoSemestre/LFP/PROYECTO_1/reports/ERRORES_202110568.html")
+            filePath = os.getcwd().replace('\\', '/') + "/reports/ERRORES_202110568.html"
+
+            webbrowser.get(
+                "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s").open_new_tab(filePath)
 
         except Exception as e:
             print(e)

@@ -4,6 +4,7 @@ from DFA.DFAState import DFAState
 from DFA.DFATransitionFunction import DFATransitionFunction
 from lexer.constants.alphabet import ALPHABET
 from lexer.constants.digit import DIGITS
+from lexer.constants.digitContent import DIGITS_CONTENT
 from lexer.constants.letter import LETTERS
 from tokens.Token import Token, TokenType
 import graphviz
@@ -60,7 +61,6 @@ class DFA ():
         # * Check if actual state is acceptance
         if self.actualState.isAcceptance:
             # * VALID TOKEN
-            # !!! Lexemes adyascent
             self.validCharacter = False
             return Token(self.actualState.tokenType, self.cleanLexeme(), row, col)
 
@@ -86,7 +86,7 @@ class DFA ():
 
             label = ""
             # * Label abreviation for all digits
-            if function.characters == DIGITS:
+            if function.characters == DIGITS or function.characters == DIGITS_CONTENT:
                 label = "D"
             elif function.characters == LETTERS:
                 label = "L"
@@ -105,6 +105,10 @@ class DFA ():
         return dot
 
     def cleanLexeme(self):
+
+        if self.actualState.isAcceptance and self.actualState.tokenType == TokenType.CONTENT:
+            return self.lexeme
+
         return self.lexeme.replace('<', '').replace('>', '').replace('/', '')
         # return self.lexeme
 

@@ -14,8 +14,6 @@ from tokens.Token import Token, TokenType
 
 class Generation():
 
-    htmlStr = ""
-
     def __init__(self):
         pass
 
@@ -57,10 +55,10 @@ class Generation():
         }
 
         COLORS = {
-            "AZUL": "background-color: blue;",
-            "ROJO": "background-color: red;",
-            "VERDE": "background-color: green;",
-            "GRIS": "background-color: gray;",
+            "AZUL": "color: blue;",
+            "ROJO": "color: red;",
+            "VERDE": "color: green;",
+            "GRIS": "color: gray;",
         }
 
         tokenNumber = 0
@@ -256,11 +254,11 @@ class Generation():
         # If first token is operation
         elif firstNumberToken.tokenType == TokenType.OPEN_TAG and firstNumberToken.operation:
             if operationType == OperationType.SENO or operationType == OperationType.COSENO or operationType == OperationType.TANGENTE or operationType == OperationType.INVERSO:
-                return Generation.concatSign(operationToken, str(Generation.makeOperation(tokenNumber+1)))
+                return "("+Generation.concatSign(operationToken, str(Generation.makeOperation(tokenNumber+1)))+")"
             else:
-                operation = Generation.makeOperation(tokenNumber+1)
+                operation = "("+Generation.makeOperation(tokenNumber+1)+")"
             # resets the where start
-            n = getClosingTagNumber(tokenNumber+1)+1
+            n = getClosingTagNumber(tokenNumber+2)+1
 
         # starts on second number
         while n < operationTokenNumberOfClosingTag:
@@ -294,7 +292,7 @@ class Generation():
         elif operation == OperationType.POTENCIA:
             return f"**{rightNumber}"
         elif operation == OperationType.RAIZ:
-            return f"**1/({rightNumber})"
+            return f"**(1/({rightNumber}))"
         elif operation == OperationType.MOD:
             return f"%{rightNumber}"
         elif operation == OperationType.SENO:

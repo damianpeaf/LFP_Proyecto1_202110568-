@@ -3,6 +3,7 @@ from DFA.DFA import DFA
 from DFA.DFAState import DFAState
 from DFA.DFATransitionFunction import DFATransitionFunction
 from lexer.constants.digit import DIGITS
+from lexer.constants.digitContent import DIGITS_CONTENT
 from lexer.constants.digitDFA import digitDFAProps
 from tokens.Token import TokenType
 
@@ -13,11 +14,11 @@ def languageDFA():
     initialState = DFAState(0)
 
     # * Content
-    firstStateProps = digitDFAProps(1, True)
-    firstState = firstStateProps['state']
+    firstState = DFAState(1, True, TokenType.CONTENT)
     firstStateFunction1 = DFATransitionFunction(
-        initialState, firstState, DIGITS)
-    firstStateFunction2 = firstStateProps['function']
+        initialState, firstState, DIGITS_CONTENT,)
+    firstStateFunction2 = DFATransitionFunction(
+        firstState, firstState, DIGITS_CONTENT)
 
     # * TAGS
 

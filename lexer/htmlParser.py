@@ -1,3 +1,4 @@
+import os
 import webbrowser
 
 
@@ -17,8 +18,10 @@ class HtmlParser():
             file.write(self.htmlStr)
             file.close()
 
-            webbrowser.get("C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s").open_new_tab(
-                "file:///E:/U/SegundoAno2022/SegundoSemestre/LFP/PROYECTO_1/reports/RESULTADOS_202110568.html")
+            filePath = os.getcwd().replace('\\', '/') + "/reports/RESULTADOS_202110568.html"
+
+            webbrowser.get(
+                "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s").open_new_tab(filePath)
 
         except Exception as e:
             print(e)
@@ -53,8 +56,9 @@ class HtmlParser():
         descriptionStr = ""
 
         for line in self.documentStructure['DESCRIPCION']:
-            descriptionStr += line
-        return "<h1 style=\"" + self.createStyles('ESTILOS_DESCRIPCION') + f"\">{descriptionStr}</h1>"
+            descriptionStr += "<h1 style=\"" + \
+                self.createStyles('ESTILOS_DESCRIPCION') + f"\">{line}</h1>"
+        return descriptionStr
 
     def createContent(self):
 

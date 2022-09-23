@@ -1,6 +1,7 @@
 from tkinter import *
 
 from views.FileEditor import FileEditor
+from views.HelpMenu import HelpMenu
 
 
 class MainMenu():
@@ -16,6 +17,10 @@ class MainMenu():
 
     def goToFileEditor(self):
         newWindow = FileEditor(self.masterWindow)
+        newWindow.window.grab_set()
+
+    def goToHelpMenu(self):
+        newWindow = HelpMenu(self.masterWindow)
         newWindow.window.grab_set()
 
     def initUI(self):
@@ -71,7 +76,8 @@ class MainMenu():
                padx=10,
                bg="#0D6EFD",
                fg="white",
-               font=buttonFont).pack(fill="x")
+               font=buttonFont,
+               command=self.goToHelpMenu).pack(fill="x")
 
         Button(self.masterWindow,
                text="Salir",

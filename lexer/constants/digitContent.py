@@ -1,4 +1,4 @@
-ALPHABET = [
+DIGITS_CONTENT = [
     # Letters (lower)
     'a',
     'b',
@@ -77,20 +77,15 @@ ALPHABET = [
     '7',
     '8',
     '9',
-    # Other symbols
     '.',
-    ',',
-    '<',
-    '>',
-    '/',
+    # Unique operator
     '=',
+    ' ',
     '[',
     ']',
-    ' ',
+    ',',
     '(',
     ')',
-    # ? Other symbols,
-    ',',
     ':',
     '+',
     '-',
